@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css'
+import axios from 'axios'
 
 const Title = (props) =>{ // a.k.a dump component
   return(
@@ -18,7 +19,12 @@ const Title = (props) =>{ // a.k.a dump component
 const ProductCard = (props) => {
   return (
     <div class= "product-card">
-      {props.item.name} ,
+      {/* <img src = {props.item.product_image} style ="max-width = 250px" ></img> */}
+      <img src = {props.item.product_image}  ></img>
+      {/* {props.item.name} , */}
+      {props.item.product_name} ,
+      {props.item.product_detial} ,
+
       {props.item.price} 
       {/* {props.item.description} */}
     </div>
@@ -65,14 +71,36 @@ class ProductList extends React.Component{
     } 
  
  
+
+  componentDidMount = () =>{
+
+  axios.get('https://dry-scrubland-02499.herokuapp.com/api/v1/products'
+      ).then((response) => {
+        console.log('response data', response)
+
+        this.setState({
+          products: response.data
+
+        })
+
+      } 
+    )
+
+
+
+
+  }
+
   render(){
 
     return(// must return
       <div> 
-  
+        
+
   
 
         <div>
+          <Title name = {this.state.name} ></Title>
           <Title name = "Chokun Shokul Zhokur!!!"></Title>
           <h1>Product List {this.state.user.name}  </h1>
             <ProductCard item={this.state.products[0]}/>
@@ -100,7 +128,7 @@ class ProductList extends React.Component{
             <div>
               {this.state.products.map(
                 (product) => ( 
-                <ProductCard item = {product} /> 
+                <ProductCard key={product.id} item = {product} /> 
               
                   )
                 )
